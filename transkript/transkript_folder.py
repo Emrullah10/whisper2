@@ -4,9 +4,11 @@ import smtplib
 from email.message import EmailMessage
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 
+load_dotenv()
 
-API_KEY = "AIzaSyAVD9-CKlxEcjZmFxFFxySjfnK0kkaei4A"
+API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=API_KEY)
 
 
@@ -17,7 +19,8 @@ def transcribe_audio(file_path):
 
 
 def summarize_and_todo(text):
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    model = genai.GenerativeModel(model_name)
     prompt = (
       """  Aşağıdaki metni işleyerek şu adımları izle:
 
@@ -97,7 +100,7 @@ def save_to_file(transcribed_text, summary, todo_list, audio_file_path):
 
 if __name__ == "__main__":
 
-    audio_file = "kayit\ders.mp3"
+    audio_file = "kayit\Motivasyon.mp3"
     transcribed_text = transcribe_audio(audio_file)
     print(f"Transcribed text: {transcribed_text}")
 
